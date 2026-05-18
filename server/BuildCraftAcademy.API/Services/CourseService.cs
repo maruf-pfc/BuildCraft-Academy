@@ -1,4 +1,4 @@
-using BuildCraftAcademy.API.Common;
+using BuildCraftAcademy.API.Common.Exceptions;
 using BuildCraftAcademy.API.Configs;
 using BuildCraftAcademy.API.DTOs.Course;
 using BuildCraftAcademy.API.Interfaces;
@@ -16,7 +16,7 @@ namespace BuildCraftAcademy.API.Services
             _context = context;
         }
 
-        public async Task<ApiResponse<IEnumerable<CourseResponseDto>>> GetAllCoursesAsync(bool publishedOnly = false)
+        public async Task<IEnumerable<CourseResponseDto>> GetAllCoursesAsync(bool publishedOnly = false)
         {
             var query = _context.Courses.AsQueryable();
 
@@ -38,19 +38,17 @@ namespace BuildCraftAcademy.API.Services
                 UpdatedAt = c.UpdatedAt
             }).ToListAsync();
 
-            return ApiResponse<IEnumerable<CourseResponseDto>>.SuccessResponse(courses);
+            return courses;
         }
 
-        public async Task<ApiResponse<CourseResponseDto>> GetCourseByIdAsync(Guid id)
+        public async Task<CourseResponseDto> GetCourseByIdAsync(Guid id)
         {
             var course = await _context.Courses.FindAsync(id);
 
             if (course == null)
-            {
-                return ApiResponse<CourseResponseDto>.FailureResponse("Course not found.");
-            }
+                throw new NotFoundException("Course not found.");
 
-            var response = new CourseResponseDto
+            return new CourseResponseDto
             {
                 Id = course.Id,
                 Title = course.Title,
@@ -62,11 +60,9 @@ namespace BuildCraftAcademy.API.Services
                 CreatedAt = course.CreatedAt,
                 UpdatedAt = course.UpdatedAt
             };
-
-            return ApiResponse<CourseResponseDto>.SuccessResponse(response);
         }
 
-        public async Task<ApiResponse<CourseResponseDto>> CreateCourseAsync(CreateCourseDto request)
+        public async Task<CourseResponseDto> CreateCourseAsync(CreateCourseDto request)
         {
             var course = new Course
             {
@@ -83,7 +79,7 @@ namespace BuildCraftAcademy.API.Services
             _context.Courses.Add(course);
             await _context.SaveChangesAsync();
 
-            var response = new CourseResponseDto
+            return new CourseResponseDto
             {
                 Id = course.Id,
                 Title = course.Title,
@@ -94,18 +90,14 @@ namespace BuildCraftAcademy.API.Services
                 IsPublished = course.IsPublished,
                 CreatedAt = course.CreatedAt
             };
-
-            return ApiResponse<CourseResponseDto>.SuccessResponse(response, "Course created successfully.");
         }
 
-        public async Task<ApiResponse<CourseResponseDto>> UpdateCourseAsync(Guid id, UpdateCourseDto request)
+        public async Task<CourseResponseDto> UpdateCourseAsync(Guid id, UpdateCourseDto request)
         {
             var course = await _context.Courses.FindAsync(id);
 
             if (course == null)
-            {
-                return ApiResponse<CourseResponseDto>.FailureResponse("Course not found.");
-            }
+                throw new NotFoundException("Course not found.");
 
             if (request.Title != null) course.Title = request.Title;
             if (request.Description != null) course.Description = request.Description;
@@ -120,7 +112,7 @@ namespace BuildCraftAcademy.API.Services
             _context.Courses.Update(course);
             await _context.SaveChangesAsync();
 
-            var response = new CourseResponseDto
+            return new CourseResponseDto
             {
                 Id = course.Id,
                 Title = course.Title,
@@ -132,23 +124,19 @@ namespace BuildCraftAcademy.API.Services
                 CreatedAt = course.CreatedAt,
                 UpdatedAt = course.UpdatedAt
             };
-
-            return ApiResponse<CourseResponseDto>.SuccessResponse(response, "Course updated successfully.");
         }
 
-        public async Task<ApiResponse<bool>> DeleteCourseAsync(Guid id)
+        public async Task<bool> DeleteCourseAsync(Guid id)
         {
             var course = await _context.Courses.FindAsync(id);
 
             if (course == null)
-            {
-                return ApiResponse<bool>.FailureResponse("Course not found.");
-            }
+                throw new NotFoundException("Course not found.");
 
             _context.Courses.Remove(course);
             await _context.SaveChangesAsync();
 
-            return ApiResponse<bool>.SuccessResponse(true, "Course deleted successfully.");
+            return true;
         }
     }
 }

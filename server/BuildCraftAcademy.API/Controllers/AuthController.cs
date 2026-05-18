@@ -17,52 +17,31 @@ namespace BuildCraftAcademy.API.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDto request)
+        public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Register([FromBody] RegisterRequestDto request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ApiResponse<object>.FailureResponse("Invalid payload."));
-
-            var response = await _authService.RegisterAsync(request);
-            if (!response.Success)
-                return BadRequest(response);
-
-            return Ok(response);
+            var result = await _authService.RegisterAsync(request);
+            return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "User registered successfully."));
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        public async Task<ActionResult<ApiResponse<AuthResponseDto>>> Login([FromBody] LoginRequestDto request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ApiResponse<object>.FailureResponse("Invalid payload."));
-
-            var response = await _authService.LoginAsync(request);
-            if (!response.Success)
-                return Unauthorized(response);
-
-            return Ok(response);
+            var result = await _authService.LoginAsync(request);
+            return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "Login successful."));
         }
 
         [HttpPost("forgot-password")]
-        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
+        public async Task<ActionResult<ApiResponse<string>>> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ApiResponse<object>.FailureResponse("Invalid payload."));
-
-            var response = await _authService.ForgotPasswordAsync(request);
-            return Ok(response);
+            var result = await _authService.ForgotPasswordAsync(request);
+            return Ok(ApiResponse<string>.SuccessResponse(result));
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
+        public async Task<ActionResult<ApiResponse<string>>> ResetPassword([FromBody] ResetPasswordRequestDto request)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ApiResponse<object>.FailureResponse("Invalid payload."));
-
-            var response = await _authService.ResetPasswordAsync(request);
-            if (!response.Success)
-                return BadRequest(response);
-
-            return Ok(response);
+            var result = await _authService.ResetPasswordAsync(request);
+            return Ok(ApiResponse<string>.SuccessResponse(result));
         }
     }
 }

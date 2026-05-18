@@ -1,6 +1,7 @@
+using BuildCraftAcademy.API.Common;
+using BuildCraftAcademy.API.Common.Exceptions;
 using System.Net;
 using System.Text.Json;
-using BuildCraftAcademy.API.Common;
 
 namespace BuildCraftAcademy.API.Middlewares
 {
@@ -26,18 +27,47 @@ namespace BuildCraftAcademy.API.Middlewares
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.Message);
-                context.Response.ContentType = "application/json";
-                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-
-                var response = _env.IsDevelopment()
-                    ? ApiResponse<object>.FailureResponse(ex.Message, new[] { ex.StackTrace?.ToString() ?? string.Empty })
-                    : ApiResponse<object>.FailureResponse("An internal server error occurred.");
-
-                var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
-                var json = JsonSerializer.Serialize(response, options);
-
-                await context.Response.WriteAsync(json);
+                await HandleExceptionAsync(context, ex, _env);
             }
+        }
+
+        private static Task HandleExceptionAsync(HttpContext context, Exception exception, IHostEnvironment env)
+        {
+            context.Response.ContentType = "application/json";
+
+            var statusCode = (int)HttpStatusCode.InternalServerError;
+            var message = "An unexpected error occurred.";
+            var errors = new List<string>();
+
+            switch (exception)
+            {
+                case ApiException e:
+                    statusCode = e.StatusCode;
+                    message = e.Message;
+                    break;
+                case NotFoundException e:
+                    statusCode = (int)HttpStatusCode.NotFound;
+                    message = e.Message;
+                    break;
+                default:
+                    if (env.IsDevelopment())
+                    {
+                        errors.Add(exception.Message);
+                        errors.Add(exception.StackTrace ?? string.Empty);
+                    }
+                    else
+                    {
+                        errors.Add("A server error occurred.");
+                    }
+                    break;
+            }
+
+            context.Response.StatusCode = statusCode;
+
+            var response = ApiResponse<object>.FailureResponse(message, errors.Any() ? errors : null);
+            var json = JsonSerializer.Serialize(response, new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+
+            return context.Response.WriteAsync(json);
         }
     }
 }
