@@ -66,3 +66,16 @@ Authorization: Bearer {{authToken}}
 ### Get All Projects
 GET {{HostAddress}}/api/project
 Accept: application/json
+
+### ---------------- PAYMENT & ENROLLMENT ---------------- ###
+
+### Dummy Payment (Enroll in Course)
+# Replace courseId with a real one
+POST {{HostAddress}}/api/payment/pay-dummy
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "courseId": "00000000-0000-0000-0000-000000000000"
+}
+
