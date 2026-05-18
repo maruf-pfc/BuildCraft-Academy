@@ -1,8 +1,14 @@
+using System.Text;
 using BuildCraftAcademy.API.Configs;
+using BuildCraftAcademy.API.Helpers;
+using BuildCraftAcademy.API.Interfaces;
 using BuildCraftAcademy.API.Middlewares;
 using BuildCraftAcademy.API.Models;
+using BuildCraftAcademy.API.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,12 +22,39 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(connectionString));
+    options.UseNpgsql(connectionString));
 
 // Configure Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+// Configure JWT Authentication
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var key = jwtSettings["Key"] ?? throw new InvalidOperationException("JWT Key is missing");
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key))
+    };
+});
+
+// Register Dependencies
+builder.Services.AddScoped<JwtHelper>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
