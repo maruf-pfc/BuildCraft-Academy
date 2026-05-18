@@ -14,6 +14,7 @@ namespace BuildCraftAcademy.API.Configs
         public DbSet<Project> Projects { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
         public DbSet<PaymentRecord> Payments { get; set; }
+        public DbSet<ContentBlock> ContentBlocks { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

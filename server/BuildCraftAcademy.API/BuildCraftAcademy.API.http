@@ -79,3 +79,26 @@ Authorization: Bearer {{authToken}}
   "courseId": "00000000-0000-0000-0000-000000000000"
 }
 
+### ---------------- CONTENT MANAGEMENT SYSTEM (CMS) ---------------- ###
+
+### Create Content Block
+POST {{HostAddress}}/api/cms
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "identifier": "home-hero-title",
+  "content": "Master The Art of Building and Engineering",
+  "type": "Text",
+  "isActive": true
+}
+
+### Get All Content Blocks
+GET {{HostAddress}}/api/cms
+Accept: application/json
+
+### Get Content Block by Identifier
+GET {{HostAddress}}/api/cms/home-hero-title
+Accept: application/json
+
+
