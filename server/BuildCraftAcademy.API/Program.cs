@@ -55,6 +55,7 @@ builder.Services.AddAuthentication(options =>
 // Register Dependencies
 builder.Services.AddScoped<JwtHelper>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 var app = builder.Build();
 
