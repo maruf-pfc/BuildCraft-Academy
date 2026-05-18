@@ -52,7 +52,7 @@ namespace BuildCraftAcademy.API.Services
             return new AuthResponseDto
             {
                 Token = token,
-                Email = user.Email,
+                Email = user.Email ?? string.Empty,
                 FullName = user.FullName,
                 Role = "User"
             };
@@ -76,7 +76,7 @@ namespace BuildCraftAcademy.API.Services
             return new AuthResponseDto
             {
                 Token = token,
-                Email = user.Email,
+                Email = user.Email ?? string.Empty,
                 FullName = user.FullName,
                 Role = role
             };

@@ -1,6 +1,68 @@
-@BuildCraftAcademy.API_HostAddress = http://localhost:5237
+@HostAddress = http://localhost:5237
 
-GET {{BuildCraftAcademy.API_HostAddress}}/weatherforecast/
+### ---------------- AUTHENTICATION ---------------- ###
+
+### Register Admin User
+POST {{HostAddress}}/api/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Admin User",
+  "email": "admin@buildcraft.com",
+  "password": "Admin@123!"
+}
+
+### Login
+# @name loginRequest
+POST {{HostAddress}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@buildcraft.com",
+  "password": "Admin@123!"
+}
+
+### Extract Token (Visual Studio / VS Code REST Client format)
+@authToken = {{loginRequest.response.body.$.data.token}}
+
+
+### ---------------- COURSE MANAGEMENT ---------------- ###
+
+### Create Course
+POST {{HostAddress}}/api/course
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Advanced Interior Design",
+  "description": "Learn modern interior design principles.",
+  "price": 49.99,
+  "videoUrl": "https://cloudinary.com/video123",
+  "instructorName": "Jane Doe",
+  "isPublished": true
+}
+
+### Get All Courses
+GET {{HostAddress}}/api/course
 Accept: application/json
 
-###
+### ---------------- PROJECT SHOWCASE ---------------- ###
+
+### Create Project
+POST {{HostAddress}}/api/project
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Skyline Commercial Building",
+  "description": "A 20-story commercial tower in downtown.",
+  "imageUrl": "https://cloudinary.com/image123",
+  "category": "Construction",
+  "clientName": "Skyline Corp",
+  "location": "New York, USA",
+  "isPublished": true
+}
+
+### Get All Projects
+GET {{HostAddress}}/api/project
+Accept: application/json
