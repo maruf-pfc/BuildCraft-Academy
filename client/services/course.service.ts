@@ -10,4 +10,13 @@ export const courseService = {
 
   getModules: (courseId: string) =>
     api.get<ApiResponse<ModuleResponseDto[]>>(`/coursemodule/by-course/${courseId}`).then((r) => r.data),
+
+  create: (data: Partial<CourseResponseDto>) =>
+    api.post<ApiResponse<CourseResponseDto>>("/course", data).then((r) => r.data),
+
+  update: (id: string, data: Partial<CourseResponseDto>) =>
+    api.put<ApiResponse<CourseResponseDto>>(`/course/${id}`, data).then((r) => r.data),
+
+  delete: (id: string) =>
+    api.delete<ApiResponse<string>>(`/course/${id}`).then((r) => r.data),
 };

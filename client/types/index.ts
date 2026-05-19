@@ -93,6 +93,7 @@ export interface CourseProgressResponseDto {
   completedLessons: number;
   progressPercentage: number;
   isCourseCompleted: boolean;
+  completedLessonIds: string[];
   modules: ModuleProgressDto[];
 }
 

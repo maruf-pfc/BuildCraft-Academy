@@ -14,8 +14,6 @@ import {
 import { courseService } from "@/services/course.service";
 import type { CourseResponseDto } from "@/types";
 
-export const metadata = { title: "Courses" };
-
 function formatPrice(price: number) {
   return new Intl.NumberFormat("en-BD", {
     style: "currency",

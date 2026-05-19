@@ -97,7 +97,7 @@ export default function LearnPage() {
   }
 
   // Find if active lesson is completed
-  const completedLessonIds = progress?.modules.flatMap((m) => m.completedLessons) || [];
+  const completedLessonIds = progress?.completedLessonIds || [];
   const isLessonCompleted = activeLessonId ? completedLessonIds.includes(activeLessonId) : false;
 
   return (

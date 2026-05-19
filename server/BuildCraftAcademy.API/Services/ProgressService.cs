@@ -105,6 +105,7 @@ namespace BuildCraftAcademy.API.Services
                 CompletedLessons = completedLessons,
                 ProgressPercentage = percentage,
                 IsCourseCompleted = totalLessons > 0 && completedLessons == totalLessons,
+                CompletedLessonIds = completedLessonIds,
                 Modules = moduleDtos
             };
         }
