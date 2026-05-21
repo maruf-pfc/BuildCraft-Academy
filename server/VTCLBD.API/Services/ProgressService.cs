@@ -126,7 +126,9 @@ namespace VTCLBD.API.Services
                 StudentName = cert.User?.FullName ?? string.Empty,
                 CourseTitle = cert.Course?.Title ?? string.Empty,
                 IssuedAt = cert.IssuedAt,
-                CertificateUrl = cert.CertificateUrl
+                CertificateUrl = !string.IsNullOrEmpty(cert.CertificateUrl) 
+                    ? cert.CertificateUrl 
+                    : $"https://res.cloudinary.com/dniosv5ot/image/upload/v1779370284/certificate_mockup.png"
             };
         }
 

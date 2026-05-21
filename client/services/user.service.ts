@@ -32,4 +32,7 @@ export const userService = {
 
   unenroll: (userId: string, courseId: string) =>
     api.post<ApiResponse<boolean>>(`/user/${userId}/unenroll`, { courseId }).then((r) => r.data),
+
+  delete: (userId: string) =>
+    api.delete<ApiResponse<boolean>>(`/user/${userId}`).then((r) => r.data),
 };

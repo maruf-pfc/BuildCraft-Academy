@@ -43,10 +43,17 @@ export default function AdminPaymentsPage() {
 
   const getStatusBadge = (status: string) => {
     switch (status?.toLowerCase()) {
+      case "success":
       case "approved":
         return (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-green-200 bg-green-50 text-green-700 text-xs font-bold">
             <RiCheckboxCircleLine className="text-sm" /> Verified
+          </span>
+        );
+      case "rejected":
+        return (
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-red-200 bg-red-50 text-red-700 text-xs font-bold">
+            <RiTimeLine className="text-sm" /> Rejected
           </span>
         );
       case "pending":
@@ -163,7 +170,7 @@ export default function AdminPaymentsPage() {
                           onClick={() => approveMutation.mutate(payment.id)}
                           className="px-4 py-2 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/95 transition-all shadow-sm shadow-primary/15 disabled:opacity-60"
                         >
-                          Approve
+                          {approveMutation.isPending ? "Processing..." : "Approve"}
                         </button>
                       ) : (
                         <span className="text-xs text-muted-foreground font-medium italic">Completed</span>

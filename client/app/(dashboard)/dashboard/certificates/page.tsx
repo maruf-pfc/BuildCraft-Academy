@@ -4,12 +4,8 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { courseService } from "@/services/course.service";
 import { progressService } from "@/services/progress.service";
-import { RiMedalLine, RiAwardLine, RiDownloadLine, RiLockLine, RiExternalLinkLine, RiArrowRightLine } from "react-icons/ri";
+import { RiMedalLine, RiAwardLine, RiLockLine, RiExternalLinkLine, RiArrowRightLine } from "react-icons/ri";
 import type { CourseResponseDto } from "@/types";
-
-interface CertificateRowProps {
-  course: CourseResponseDto;
-}
 
 function CertificateRow({ course }: { course: CourseResponseDto }) {
   // Query completion progress
@@ -22,7 +18,7 @@ function CertificateRow({ course }: { course: CourseResponseDto }) {
   const isCompleted = progress?.isCourseCompleted;
 
   // Query certificate if completed
-  const { data: certRes, isLoading: certLoading } = useQuery({
+  const { data: certRes } = useQuery({
     queryKey: ["certificate", course.id],
     queryFn: () => progressService.getCertificate(course.id),
     enabled: !!isCompleted,
@@ -53,9 +49,9 @@ function CertificateRow({ course }: { course: CourseResponseDto }) {
 
       <div>
         {isCompleted ? (
-          cert ? (
+          cert?.certificateUrl ? (
             <a
-              href={cert.certificateUrl ?? "#"}
+              href={cert.certificateUrl}
               target="_blank"
               rel="noreferrer"
               className="w-full md:w-auto px-5 py-2.5 rounded-xl bg-amber-500 text-white text-sm font-semibold hover:bg-amber-600 transition-all shadow-md shadow-amber-500/10 flex items-center justify-center gap-1.5"
@@ -63,7 +59,9 @@ function CertificateRow({ course }: { course: CourseResponseDto }) {
               <RiExternalLinkLine className="text-base" /> View Certificate
             </a>
           ) : (
-            <div className="text-xs text-muted-foreground italic px-4 py-2 bg-muted/30 rounded-lg">Generating record...</div>
+            <div className="px-4 py-2.5 rounded-xl bg-amber-500/10 text-amber-600 text-sm font-semibold flex items-center gap-1.5 border border-amber-500/20">
+              <RiAwardLine className="text-base" /> Certificate Issued ✓
+            </div>
           )
         ) : (
           <Link
@@ -79,9 +77,10 @@ function CertificateRow({ course }: { course: CourseResponseDto }) {
 }
 
 export default function CertificatesPage() {
+  // Only fetch ENROLLED courses, not all courses
   const { data: coursesData, isLoading } = useQuery({
-    queryKey: ["courses"],
-    queryFn: () => courseService.getAll(true),
+    queryKey: ["enrolled-courses"],
+    queryFn: () => courseService.getEnrolled(),
   });
 
   const courses: CourseResponseDto[] = coursesData?.data ?? [];
@@ -111,7 +110,7 @@ export default function CertificatesPage() {
         <div className="rounded-2xl border border-dashed border-border p-12 text-center max-w-lg mx-auto mt-10">
           <RiMedalLine className="text-5xl text-muted-foreground/30 mx-auto mb-4" />
           <h3 className="font-semibold text-lg mb-1">No certificates yet</h3>
-          <p className="text-sm text-muted-foreground mb-6">Complete all course materials and lessons to unlock your certificate.</p>
+          <p className="text-sm text-muted-foreground mb-6">Enroll in a course and complete all lessons to earn your certificate.</p>
           <Link href="/courses" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-primary text-primary-foreground font-semibold hover:bg-primary/90 transition-all">
             Browse Courses <RiArrowRightLine />
           </Link>

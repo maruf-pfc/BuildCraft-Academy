@@ -19,6 +19,17 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   (error) => {
+    // Only auto-logout on genuine 401 Unauthorized responses
+    if (error.response?.status === 401) {
+      const authStore = useAuthStore.getState();
+      if (authStore.isAuthenticated) {
+        authStore.logout();
+        if (typeof window !== "undefined") {
+          window.location.href = "/auth/login";
+        }
+      }
+      return Promise.reject(new Error("Session expired. Please login again."));
+    }
     const message =
       error.response?.data?.message ?? error.message ?? "An error occurred";
     return Promise.reject(new Error(message));

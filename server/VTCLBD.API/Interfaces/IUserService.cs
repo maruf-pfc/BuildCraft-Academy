@@ -12,5 +12,6 @@ namespace VTCLBD.API.Interfaces
         Task<bool> ToggleUserStatusAsync(string userId, bool isActive);
         Task<bool> ManuallyEnrollUserAsync(string userId, Guid courseId);
         Task<bool> ManuallyUnenrollUserAsync(string userId, Guid courseId);
+        Task<bool> DeleteUserAsync(string userId);
     }
 }

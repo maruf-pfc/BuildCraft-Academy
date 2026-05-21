@@ -55,5 +55,12 @@ namespace VTCLBD.API.Controllers
             var result = await _userService.ManuallyUnenrollUserAsync(id, dto.CourseId);
             return Ok(ApiResponse<bool>.SuccessResponse(result, "User unenrolled manually successfully."));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteUser(string id)
+        {
+            var result = await _userService.DeleteUserAsync(id);
+            return Ok(ApiResponse<bool>.SuccessResponse(result, "User deleted successfully."));
+        }
     }
 }

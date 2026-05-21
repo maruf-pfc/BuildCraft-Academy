@@ -200,5 +200,38 @@ namespace VTCLBD.API.Services
 
             return true;
         }
+
+        public async Task<bool> DeleteUserAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                throw new NotFoundException("User not found.");
+
+            // Prevent deleting the last admin
+            if (user.Role == "Admin")
+            {
+                var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                if (admins.Count <= 1)
+                    throw new ApiException("Cannot delete the last remaining Administrator.", 400);
+            }
+
+            // Remove related data
+            var enrollments = _context.Enrollments.Where(e => e.UserId == userId);
+            _context.Enrollments.RemoveRange(enrollments);
+
+            var payments = _context.Payments.Where(p => p.UserId == userId);
+            _context.Payments.RemoveRange(payments);
+
+            var progress = _context.LessonProgresses.Where(p => p.UserId == userId);
+            _context.LessonProgresses.RemoveRange(progress);
+
+            var certificates = _context.Certificates.Where(c => c.UserId == userId);
+            _context.Certificates.RemoveRange(certificates);
+
+            await _context.SaveChangesAsync();
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
+        }
     }
 }

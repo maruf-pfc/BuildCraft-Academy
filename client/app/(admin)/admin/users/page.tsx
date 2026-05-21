@@ -15,6 +15,7 @@ import {
   RiMailLine,
   RiTimeLine,
   RiCloseCircleLine,
+  RiDeleteBinLine,
 } from "react-icons/ri";
 import { userService, type UserDetailDto } from "@/services/user.service";
 import { courseService } from "@/services/course.service";
@@ -98,6 +99,15 @@ export default function AdminUsersPage() {
       });
     },
     onError: (err: any) => toast.error(err.response?.data?.message || err.message || "Failed to unenroll user"),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (userId: string) => userService.delete(userId),
+    onSuccess: () => {
+      toast.success("User deleted successfully.");
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+    },
+    onError: (err: any) => toast.error(err.response?.data?.message || err.message || "Failed to delete user"),
   });
 
   const handleRoleChange = (userId: string, newRole: string) => {
@@ -225,12 +235,26 @@ export default function AdminUsersPage() {
 
                     {/* Manage Enrollment Action */}
                     <td className="p-4 text-right">
-                      <button
-                        onClick={() => openEnrollmentModal(user)}
-                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-background text-xs font-semibold hover:bg-muted transition-all"
-                      >
-                        <RiBookOpenLine /> Manage Courses
-                      </button>
+                      <div className="flex items-center gap-2 justify-end">
+                        <button
+                          onClick={() => openEnrollmentModal(user)}
+                          className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl border border-border bg-background text-xs font-semibold hover:bg-muted transition-all"
+                        >
+                          <RiBookOpenLine /> Manage Courses
+                        </button>
+                        <button
+                          onClick={() => {
+                            if (confirm(`Are you sure you want to permanently delete ${user.fullName || user.email}? This action cannot be undone.`)) {
+                              deleteMutation.mutate(user.id);
+                            }
+                          }}
+                          disabled={deleteMutation.isPending}
+                          className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/5 border border-border hover:border-destructive/20 rounded-xl transition-all"
+                          title="Delete User"
+                        >
+                          <RiDeleteBinLine className="text-base" />
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
