@@ -13,6 +13,17 @@ export const progressService = {
 };
 
 export const paymentService = {
-  payDummy: (courseId: string) =>
-    api.post("/payment/pay-dummy", { courseId }).then((r) => r.data),
+  requestEnrollment: (data: {
+    courseId: string;
+    paymentMethod: string;
+    transactionId: string;
+    phoneNumber: string;
+    amount: number;
+  }) => api.post<ApiResponse<any>>("/payment/enroll-request", data).then((r) => r.data),
+
+  getAllPayments: () =>
+    api.get<ApiResponse<any[]>>("/payment").then((r) => r.data),
+
+  approvePayment: (paymentId: string) =>
+    api.post<ApiResponse<boolean>>(`/payment/approve/${paymentId}`).then((r) => r.data),
 };

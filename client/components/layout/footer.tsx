@@ -3,8 +3,9 @@ import { RiGraduationCapLine, RiFacebookLine, RiInstagramLine, RiLinkedinLine, R
 
 const footerLinks = {
   Platform: [
-    { label: "Courses", href: "/courses" },
+    { label: "Trainings", href: "/courses" },
     { label: "Projects", href: "/projects" },
+    { label: "Interior", href: "/interior" },
     { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
@@ -31,7 +32,7 @@ export function Footer() {
                 <RiGraduationCapLine className="text-primary-foreground text-xl" />
               </div>
               <span className="font-bold text-lg tracking-tight">
-                BuildCraft<span className="text-primary">Academy</span>
+                VTCL<span className="text-primary">BD</span>
               </span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
@@ -77,7 +78,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 pt-6 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <span>© {new Date().getFullYear()} BuildCraft Academy. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} VTCLBD. All rights reserved.</span>
           <span>Dhaka, Bangladesh</span>
         </div>
       </div>

@@ -192,6 +192,7 @@ namespace VTCLBD.API.Services
             {
                 Id = v.Id,
                 Title = v.Title,
+                VideoUrl = v.VideoUrl,
                 Order = v.Order,
                 DurationInSeconds = v.DurationInSeconds,
                 IsPublished = v.IsPublished

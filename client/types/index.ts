@@ -50,6 +50,7 @@ export interface CourseResponseDto {
 export interface VideoLessonSummaryDto {
   id: string;
   title: string;
+  videoUrl?: string;
   order: number;
   durationInSeconds: number;
   isPublished: boolean;
@@ -118,6 +119,11 @@ export interface ProjectResponseDto {
   clientName?: string;
   location?: string;
   completionDate?: string;
+  status: string;
+  videoUrl?: string;
+  clientReview?: string;
+  clientReviewerName?: string;
+  secondaryImages?: string;
   isPublished: boolean;
   createdAt: string;
 }
