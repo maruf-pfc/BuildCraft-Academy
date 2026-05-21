@@ -4,7 +4,7 @@ WORKDIR /app
 
 # Copy package descriptors
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # Copy application source
 COPY . .
