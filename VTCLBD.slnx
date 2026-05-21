@@ -1,0 +1,5 @@
+<Solution>
+  <Folder Name="/server/">
+    <Project Path="server/VTCLBD.API/VTCLBD.API.csproj" />
+  </Folder>
+</Solution>
