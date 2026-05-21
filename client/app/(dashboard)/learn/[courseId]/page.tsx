@@ -149,14 +149,25 @@ export default function LearnPage() {
           {activeLesson ? (
             <>
               {/* Premium Video Embed */}
-              <div className="relative aspect-video rounded-2xl overflow-hidden bg-black border border-border shadow-xl">
-                <iframe
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0"
-                  title={activeLesson.title}
-                  className="absolute inset-0 w-full h-full"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
+              <div className="relative aspect-video rounded-2xl overflow-hidden bg-black border border-border shadow-xl group">
+                <video
+                  key={activeLesson.id}
+                  src={activeLesson.videoUrl}
+                  controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="w-full h-full object-cover"
                 />
+                {/* <video
+                  key={activeLesson.id}
+                  src={activeLesson.videoUrl || "https://res.cloudinary.com/dniosv5ot/video/upload/v1779370284/engineers_roeyve.mp4"}
+                  controls
+                  controlsList="nodownload"
+                  disablePictureInPicture
+                  onContextMenu={(e) => e.preventDefault()}
+                  className="w-full h-full object-cover"
+                /> */}
               </div>
 
               {/* Title & mark complete button */}

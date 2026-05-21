@@ -35,6 +35,11 @@ namespace VTCLBD.API.Services
                 ClientName = p.ClientName,
                 Location = p.Location,
                 CompletionDate = p.CompletionDate,
+                Status = p.Status,
+                VideoUrl = p.VideoUrl,
+                ClientReview = p.ClientReview,
+                ClientReviewerName = p.ClientReviewerName,
+                SecondaryImages = p.SecondaryImages,
                 IsPublished = p.IsPublished,
                 CreatedAt = p.CreatedAt,
                 UpdatedAt = p.UpdatedAt
@@ -60,6 +65,11 @@ namespace VTCLBD.API.Services
                 ClientName = p.ClientName,
                 Location = p.Location,
                 CompletionDate = p.CompletionDate,
+                Status = p.Status,
+                VideoUrl = p.VideoUrl,
+                ClientReview = p.ClientReview,
+                ClientReviewerName = p.ClientReviewerName,
+                SecondaryImages = p.SecondaryImages,
                 IsPublished = p.IsPublished,
                 CreatedAt = p.CreatedAt,
                 UpdatedAt = p.UpdatedAt
@@ -78,6 +88,11 @@ namespace VTCLBD.API.Services
                 ClientName = request.ClientName,
                 Location = request.Location,
                 CompletionDate = request.CompletionDate,
+                Status = request.Status,
+                VideoUrl = request.VideoUrl,
+                ClientReview = request.ClientReview,
+                ClientReviewerName = request.ClientReviewerName,
+                SecondaryImages = request.SecondaryImages,
                 IsPublished = request.IsPublished,
                 CreatedAt = DateTime.UtcNow
             };
@@ -95,6 +110,11 @@ namespace VTCLBD.API.Services
                 ClientName = project.ClientName,
                 Location = project.Location,
                 CompletionDate = project.CompletionDate,
+                Status = project.Status,
+                VideoUrl = project.VideoUrl,
+                ClientReview = project.ClientReview,
+                ClientReviewerName = project.ClientReviewerName,
+                SecondaryImages = project.SecondaryImages,
                 IsPublished = project.IsPublished,
                 CreatedAt = project.CreatedAt
             };
@@ -115,6 +135,11 @@ namespace VTCLBD.API.Services
             if (request.ClientName != null) project.ClientName = request.ClientName;
             if (request.Location != null) project.Location = request.Location;
             if (request.CompletionDate.HasValue) project.CompletionDate = request.CompletionDate;
+            if (request.Status != null) project.Status = request.Status;
+            if (request.VideoUrl != null) project.VideoUrl = request.VideoUrl;
+            if (request.ClientReview != null) project.ClientReview = request.ClientReview;
+            if (request.ClientReviewerName != null) project.ClientReviewerName = request.ClientReviewerName;
+            if (request.SecondaryImages != null) project.SecondaryImages = request.SecondaryImages;
             if (request.IsPublished.HasValue) project.IsPublished = request.IsPublished.Value;
 
             project.UpdatedAt = DateTime.UtcNow;
@@ -132,6 +157,11 @@ namespace VTCLBD.API.Services
                 ClientName = project.ClientName,
                 Location = project.Location,
                 CompletionDate = project.CompletionDate,
+                Status = project.Status,
+                VideoUrl = project.VideoUrl,
+                ClientReview = project.ClientReview,
+                ClientReviewerName = project.ClientReviewerName,
+                SecondaryImages = project.SecondaryImages,
                 IsPublished = project.IsPublished,
                 CreatedAt = project.CreatedAt,
                 UpdatedAt = project.UpdatedAt

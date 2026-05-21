@@ -4,6 +4,8 @@ namespace VTCLBD.API.Interfaces
 {
     public interface IPaymentService
     {
-        Task<PaymentResponseDto> ProcessDummyPaymentAsync(string userId, InitiatePaymentDto request);
+        Task<PaymentResponseDto> RequestEnrollmentAsync(string userId, InitiatePaymentDto request);
+        Task<List<PaymentRecordDetailDto>> GetAllPaymentsAsync();
+        Task<bool> ApprovePaymentAsync(Guid paymentId);
     }
 }

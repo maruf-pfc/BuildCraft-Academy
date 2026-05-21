@@ -12,12 +12,14 @@ import {
   RiSettings4Line,
   RiLogoutBoxLine,
   RiHomeLine,
+  RiShieldCheckLine,
 } from "react-icons/ri";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const adminNavItems = [
   { label: "Overview", href: "/admin", icon: RiDashboardLine },
+  { label: "Verify Payments", href: "/admin/payments", icon: RiShieldCheckLine },
   { label: "Manage Courses", href: "/admin/courses", icon: RiBookOpenLine },
   { label: "Manage Projects", href: "/admin/projects", icon: RiBuildingLine },
   { label: "Manage CMS", href: "/admin/cms", icon: RiSettings4Line },
@@ -54,7 +56,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
               <RiGraduationCapLine className="text-primary-foreground text-base" />
             </div>
             <span className="font-bold text-sm tracking-tight text-foreground">
-              BuildCraft<span className="text-primary">Admin</span>
+              VTCLBD<span className="text-primary">Admin</span>
             </span>
           </Link>
         </div>
@@ -120,7 +122,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
             <RiGraduationCapLine className="text-primary-foreground text-sm" />
           </div>
-          <span className="font-bold text-sm text-foreground">BuildCraft Admin</span>
+          <span className="font-bold text-sm text-foreground">VTCLBD Admin</span>
         </Link>
         <button
           onClick={() => {

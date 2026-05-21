@@ -35,6 +35,7 @@ namespace VTCLBD.API.DTOs.Module
     {
         public Guid Id { get; set; }
         public string Title { get; set; } = string.Empty;
+        public string VideoUrl { get; set; } = string.Empty;
         public int Order { get; set; }
         public int DurationInSeconds { get; set; }
         public bool IsPublished { get; set; }

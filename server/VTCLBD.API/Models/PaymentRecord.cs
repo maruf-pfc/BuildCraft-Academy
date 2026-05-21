@@ -24,6 +24,8 @@ namespace VTCLBD.API.Models
         
         public string Status { get; set; } = "Pending"; // Pending, Success, Failed
         public string? TransactionId { get; set; }
+        public string? PaymentMethod { get; set; }
+        public string? PhoneNumber { get; set; }
         
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

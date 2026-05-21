@@ -17,6 +17,12 @@ namespace VTCLBD.API.DTOs.Project
         public string? ClientName { get; set; }
         public string? Location { get; set; }
         public DateTime? CompletionDate { get; set; }
+
+        public string Status { get; set; } = "Completed";
+        public string? VideoUrl { get; set; }
+        public string? ClientReview { get; set; }
+        public string? ClientReviewerName { get; set; }
+        public string? SecondaryImages { get; set; }
         
         public bool IsPublished { get; set; } = true;
     }
