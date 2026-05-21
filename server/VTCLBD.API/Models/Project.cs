@@ -21,6 +21,12 @@ namespace VTCLBD.API.Models
         public string? Location { get; set; }
         public DateTime? CompletionDate { get; set; }
 
+        public string Status { get; set; } = "Completed"; // Completed, Ongoing, Upcoming
+        public string? VideoUrl { get; set; }
+        public string? ClientReview { get; set; }
+        public string? ClientReviewerName { get; set; }
+        public string? SecondaryImages { get; set; } // Comma-separated list of extra images
+
         public bool IsPublished { get; set; } = true;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

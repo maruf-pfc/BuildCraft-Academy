@@ -9,7 +9,7 @@ namespace VTCLBD.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Any logged-in user can pay and enroll
+    [Authorize]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
@@ -19,15 +19,31 @@ namespace VTCLBD.API.Controllers
             _paymentService = paymentService;
         }
 
-        [HttpPost("pay-dummy")]
-        public async Task<ActionResult<ApiResponse<PaymentResponseDto>>> ProcessDummyPayment([FromBody] InitiatePaymentDto request)
+        [HttpPost("enroll-request")]
+        public async Task<ActionResult<ApiResponse<PaymentResponseDto>>> RequestEnrollment([FromBody] InitiatePaymentDto request)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
                 return Unauthorized(ApiResponse<object>.FailureResponse("User ID not found in token."));
 
-            var result = await _paymentService.ProcessDummyPaymentAsync(userId, request);
-            return Ok(ApiResponse<PaymentResponseDto>.SuccessResponse(result, "Transaction completed."));
+            var result = await _paymentService.RequestEnrollmentAsync(userId, request);
+            return Ok(ApiResponse<PaymentResponseDto>.SuccessResponse(result, "Enrollment request submitted successfully."));
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ApiResponse<List<PaymentRecordDetailDto>>>> GetAllPayments()
+        {
+            var result = await _paymentService.GetAllPaymentsAsync();
+            return Ok(ApiResponse<List<PaymentRecordDetailDto>>.SuccessResponse(result, "Payments retrieved."));
+        }
+
+        [HttpPost("approve/{paymentId}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult<ApiResponse<bool>>> ApprovePayment(Guid paymentId)
+        {
+            var result = await _paymentService.ApprovePaymentAsync(paymentId);
+            return Ok(ApiResponse<bool>.SuccessResponse(result, "Payment approved and student enrolled successfully."));
         }
     }
 }
