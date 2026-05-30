@@ -23,7 +23,7 @@ namespace VTCLBD.API.Services
             _cloudinary = new Cloudinary(acc);
         }
 
-        public async Task<FileUploadResponseDto> UploadFileAsync(IFormFile file, string folder = "buildcraft")
+        public async Task<FileUploadResponseDto> UploadFileAsync(IFormFile file, string folder = "victory")
         {
             if (file == null || file.Length == 0)
                 throw new ApiException("No file provided.", 400);

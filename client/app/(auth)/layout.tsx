@@ -39,7 +39,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
               ))}
             </div>
           </div>
-          <p className="text-white/50 text-xs">© {new Date().getFullYear()} BuildCraft Academy. All rights reserved.</p>
+          <p className="text-white/50 text-xs">© {new Date().getFullYear()} Victory Design & Construction Ltd. All rights reserved.</p>
         </div>
       </div>
 

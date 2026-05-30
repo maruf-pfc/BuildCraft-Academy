@@ -25,6 +25,6 @@ export const useAuthStore = create<AuthState>()(
       logout: () =>
         set({ user: null, token: null, isAuthenticated: false }),
     }),
-    { name: "buildcraft-auth" }
+    { name: "vtclbd-auth" }
   )
 );

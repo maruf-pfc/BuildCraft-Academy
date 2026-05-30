@@ -51,7 +51,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <RiGraduationCapLine className="text-primary-foreground text-base" />
             </div>
             <span className="font-bold text-sm tracking-tight">
-              BuildCraft<span className="text-primary">Academy</span>
+              Victory Design &<span className="text-primary"> Construction</span>
             </span>
           </Link>
         </div>
@@ -111,7 +111,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
             <RiGraduationCapLine className="text-primary-foreground text-sm" />
           </div>
-          <span className="font-bold text-sm">BuildCraftAcademy</span>
+          <span className="font-bold text-sm">Victory Design & Construction</span>
         </Link>
         <button
           onClick={() => { logout(); router.push("/"); }}

@@ -6,6 +6,7 @@ namespace VTCLBD.API.DTOs.Payment
         public string Status { get; set; } = string.Empty;
         public string Message { get; set; } = string.Empty;
         public bool IsEnrolled { get; set; }
+        public string? GatewayPageURL { get; set; }
     }
 
     public class PaymentRecordDetailDto

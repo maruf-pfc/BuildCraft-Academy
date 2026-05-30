@@ -27,9 +27,25 @@ import { paymentService } from "@/services/progress.service";
 import { useAuthStore } from "@/stores/auth.store";
 
 const enrollmentSchema = zod.object({
-  paymentMethod: zod.enum(["bKash", "Nagad", "Bank Transfer"]),
-  phoneNumber: zod.string().min(10, "Please enter a valid account or phone number (min 10 chars)."),
-  transactionId: zod.string().min(6, "Please enter a valid Transaction ID (min 6 chars).")
+  paymentMethod: zod.enum(["bKash", "Nagad", "Bank Transfer", "SSLCommerz"]),
+  phoneNumber: zod.string().optional(),
+  transactionId: zod.string().optional()
+}).refine((data) => {
+  if (data.paymentMethod !== "SSLCommerz") {
+    return data.phoneNumber && data.phoneNumber.length >= 10;
+  }
+  return true;
+}, {
+  message: "Please enter a valid account or phone number (min 10 chars).",
+  path: ["phoneNumber"]
+}).refine((data) => {
+  if (data.paymentMethod !== "SSLCommerz") {
+    return data.transactionId && data.transactionId.length >= 6;
+  }
+  return true;
+}, {
+  message: "Please enter a valid Transaction ID (min 6 chars).",
+  path: ["transactionId"]
 });
 
 type EnrollmentFormData = zod.infer<typeof enrollmentSchema>;
@@ -86,7 +102,7 @@ export default function CourseDetailPage() {
   } = useForm<EnrollmentFormData>({
     resolver: zodResolver(enrollmentSchema),
     defaultValues: {
-      paymentMethod: "bKash",
+      paymentMethod: "SSLCommerz",
       phoneNumber: "",
       transactionId: ""
     }
@@ -95,19 +111,29 @@ export default function CourseDetailPage() {
   const selectedPaymentMethod = watch("paymentMethod");
 
   const enrollMutation = useMutation({
-    mutationFn: (formData: EnrollmentFormData) =>
-      paymentService.requestEnrollment({
-        courseId: id,
-        paymentMethod: formData.paymentMethod,
-        phoneNumber: formData.phoneNumber,
-        transactionId: formData.transactionId,
-        amount: course?.price || 0
-      }),
+    mutationFn: async (formData: EnrollmentFormData) => {
+      if (formData.paymentMethod === "SSLCommerz") {
+        return paymentService.initiateSSLCommerz(id);
+      } else {
+        return paymentService.requestEnrollment({
+          courseId: id,
+          paymentMethod: formData.paymentMethod,
+          phoneNumber: formData.phoneNumber ?? "",
+          transactionId: formData.transactionId ?? "",
+          amount: course?.price || 0
+        });
+      }
+    },
     onSuccess: (res) => {
-      toast.success(res.message || "Enrollment request submitted successfully!");
-      setIsModalOpen(false);
-      reset();
-      router.push("/dashboard");
+      if (res.data?.gatewayPageURL) {
+        toast.success("Redirecting to SSLCommerz payment gateway...");
+        window.location.href = res.data.gatewayPageURL;
+      } else {
+        toast.success(res.message || "Enrollment request submitted successfully!");
+        setIsModalOpen(false);
+        reset();
+        router.push("/dashboard");
+      }
     },
     onError: (err: Error) => {
       toast.error(err.message);
@@ -390,19 +416,19 @@ export default function CourseDetailPage() {
                 <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
                   Select Payment Method
                 </label>
-                <div className="grid grid-cols-3 gap-3">
-                  {["bKash", "Nagad", "Bank Transfer"].map((method) => (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {["SSLCommerz", "bKash", "Nagad", "Bank Transfer"].map((method) => (
                     <button
                       type="button"
                       key={method}
                       onClick={() => setValue("paymentMethod", method as any)}
-                      className={`py-2 px-3 rounded-xl border text-center font-bold text-xs transition-all ${
+                      className={`py-2.5 px-2 rounded-xl border text-center font-bold text-[11px] transition-all leading-tight ${
                         selectedPaymentMethod === method
                           ? "border-primary bg-primary/10 text-primary"
                           : "border-border text-muted-foreground hover:text-foreground hover:bg-muted"
                       }`}
                     >
-                      {method}
+                      {method === "SSLCommerz" ? "Online Pay" : method}
                     </button>
                   ))}
                 </div>
@@ -411,37 +437,46 @@ export default function CourseDetailPage() {
                 )}
               </div>
 
-              {/* Phone/Account Number */}
-              <div>
-                <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                  Sender Phone / Account Number
-                </label>
-                <input
-                  type="text"
-                  placeholder="e.g. 017XXXXXXXX"
-                  {...register("phoneNumber")}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-border/80 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-xs"
-                />
-                {errors.phoneNumber && (
-                  <p className="text-xs text-red-500 mt-1">{errors.phoneNumber.message}</p>
-                )}
-              </div>
+              {selectedPaymentMethod === "SSLCommerz" ? (
+                <div className="p-4 rounded-2xl bg-primary/[0.03] border border-primary/20 text-xs text-muted-foreground leading-relaxed">
+                  <p className="font-semibold text-primary mb-1">💳 Online Payment (SSLCommerz Gateway)</p>
+                  You will be securely redirected to the SSLCommerz sandbox payment gateway. You can pay using local debit/credit cards, mobile banking (bKash, Nagad, Rocket), or internet banking.
+                </div>
+              ) : (
+                <>
+                  {/* Phone/Account Number */}
+                  <div>
+                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                      Sender Phone / Account Number
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. 017XXXXXXXX"
+                      {...register("phoneNumber")}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-border/80 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-xs"
+                    />
+                    {errors.phoneNumber && (
+                      <p className="text-xs text-red-500 mt-1">{errors.phoneNumber.message}</p>
+                    )}
+                  </div>
 
-              {/* Transaction ID */}
-              <div>
-                <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
-                  Transaction ID (TxnID)
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter the transaction reference"
-                  {...register("transactionId")}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-border/80 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-xs uppercase"
-                />
-                {errors.transactionId && (
-                  <p className="text-xs text-red-500 mt-1">{errors.transactionId.message}</p>
-                )}
-              </div>
+                  {/* Transaction ID */}
+                  <div>
+                    <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">
+                      Transaction ID (TxnID)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Enter the transaction reference"
+                      {...register("transactionId")}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-border/80 bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all text-xs uppercase"
+                    />
+                    {errors.transactionId && (
+                      <p className="text-xs text-red-500 mt-1">{errors.transactionId.message}</p>
+                    )}
+                  </div>
+                </>
+              )}
 
               {/* Submit Button */}
               <div className="pt-2">
@@ -450,7 +485,9 @@ export default function CourseDetailPage() {
                   disabled={enrollMutation.isPending}
                   className="w-full py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:bg-primary/95 transition-all shadow-md disabled:opacity-60"
                 >
-                  {enrollMutation.isPending ? "Submitting Request..." : "Submit Enrollment Request"}
+                  {enrollMutation.isPending
+                    ? (selectedPaymentMethod === "SSLCommerz" ? "Redirecting..." : "Submitting Request...")
+                    : (selectedPaymentMethod === "SSLCommerz" ? "Pay and Enroll Online" : "Submit Enrollment Request")}
                 </button>
               </div>
             </form>

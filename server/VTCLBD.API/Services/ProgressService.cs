@@ -166,15 +166,27 @@ namespace VTCLBD.API.Services
             var progress = await GetCourseProgressAsync(userId, courseId);
             if (!progress.IsCourseCompleted) return;
 
-            var certNumber = $"CERT-{DateTime.UtcNow:yyyy}-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
+            // Find course completion date (max lesson completion date)
+            var courseLessonIds = await _context.VideoLessons
+                .Where(v => v.Module!.CourseId == courseId && v.IsPublished)
+                .Select(v => v.Id)
+                .ToListAsync();
+
+            var completionDates = await _context.LessonProgresses
+                .Where(p => p.UserId == userId && courseLessonIds.Contains(p.LessonId) && p.IsCompleted)
+                .Select(p => p.CompletedAt)
+                .ToListAsync();
+
+            var completionDate = completionDates.Any() ? completionDates.Max() : DateTime.UtcNow;
+
+            var certNumber = $"CERT-{completionDate:yyyy}-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
 
             var certificate = new Certificate
             {
                 UserId = userId,
                 CourseId = courseId,
                 CertificateNumber = certNumber,
-                IssuedAt = DateTime.UtcNow
-                // CertificateUrl can be set after PDF generation is implemented
+                IssuedAt = completionDate
             };
 
             _context.Certificates.Add(certificate);

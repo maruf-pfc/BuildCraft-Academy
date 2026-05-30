@@ -70,7 +70,7 @@ function getLocalFallbackResponse(query: string, context: string): string {
         line.toLowerCase().includes("bdt")
     );
     if (courseLines.length > 0) {
-      return `Victory Academy offers the following professional courses:\n\n${courseLines
+      return `Victory Design & Construction Ltd offers the following professional courses:\n\n${courseLines
         .map((line) => `📚 ${line.trim().replace(/^-/, "").trim()}`)
         .join("\n")}\n\nTo enroll, visit our Training page or call us directly!`;
     }

@@ -19,7 +19,7 @@ namespace VTCLBD.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ApiResponse<FileUploadResponseDto>>> UploadFile(IFormFile file, [FromQuery] string folder = "buildcraft")
+        public async Task<ActionResult<ApiResponse<FileUploadResponseDto>>> UploadFile(IFormFile file, [FromQuery] string folder = "victory")
         {
             var result = await _fileUploadService.UploadFileAsync(file, folder);
             return Ok(ApiResponse<FileUploadResponseDto>.SuccessResponse(result, "File uploaded successfully."));

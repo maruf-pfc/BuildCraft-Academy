@@ -14,7 +14,7 @@ export default function TermsPage() {
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Terms of Service</h1>
         <p className="text-xs text-muted-foreground">Last updated: May 19, 2026</p>
         <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-          Please review the following academic and technical regulations before enrolling in any of BuildCraft Academy&apos;s blueprints.
+          Please review the following academic and technical regulations before enrolling in any of Victory Design & Construction Ltd&apos;s blueprints.
         </p>
       </div>
 
@@ -49,28 +49,28 @@ export default function TermsPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-foreground">1. Acceptance of Terms</h2>
           <p>
-            By establishing a credentialed account on the BuildCraft Academy portal, you agree to comply with all student code-of-conduct guidelines, site terms, and applicable local civil laws of Bangladesh.
+            By establishing a credentialed account on the Victory Design & Construction Ltd portal, you agree to comply with all student code-of-conduct guidelines, site terms, and applicable local civil laws of Bangladesh.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-foreground">2. Intellectual Property</h2>
           <p>
-            All video guides, course syllabus modules, layout codes, custom graphics, and downloadable architectural resources are strictly owned by BuildCraft Academy and are protected under international copyright regulations.
+            All video guides, course syllabus modules, layout codes, custom graphics, and downloadable architectural resources are strictly owned by Victory Design & Construction Ltd and are protected under international copyright regulations.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-foreground">3. Student Account Access</h2>
           <p>
-            Your access key is strictly personal. In cases where our telemetry registers parallel logins or suspicious cross-location classroom downloads, BuildCraft Academy reserves the right to suspend structural course access pending validation.
+            Your access key is strictly personal. In cases where our telemetry registers parallel logins or suspicious cross-location classroom downloads, Victory Design & Construction Ltd reserves the right to suspend structural course access pending validation.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-foreground">4. Liability Boundaries</h2>
           <p>
-            BuildCraft Academy training guides are structured for educational instruction. We are not liable for private construction site failures, local structural inspection rejections, or engineering miscalculations carried out on real active project sites.
+            Victory Design & Construction Ltd training guides are structured for educational instruction. We are not liable for private construction site failures, local structural inspection rejections, or engineering miscalculations carried out on real active project sites.
           </p>
         </section>
       </div>

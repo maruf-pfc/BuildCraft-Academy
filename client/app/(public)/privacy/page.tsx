@@ -14,7 +14,7 @@ export default function PrivacyPage() {
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Privacy Policy</h1>
         <p className="text-xs text-muted-foreground">Last updated: May 19, 2026</p>
         <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-          At BuildCraft Academy, we are fully committed to protecting your personal information, course learning history, and progress analytics.
+          At Victory Design & Construction Ltd, we are fully committed to protecting your personal information, course learning history, and progress analytics.
         </p>
       </div>
 
@@ -64,7 +64,7 @@ export default function PrivacyPage() {
         <section className="space-y-3">
           <h2 className="text-lg font-bold text-foreground">4. Policy Modifications</h2>
           <p>
-            BuildCraft Academy reserves the right to modify this statement. Registered accounts will receive direct dashboard notices if there are material modifications to data processing operations.
+            Victory Design & Construction Ltd reserves the right to modify this statement. Registered accounts will receive direct dashboard notices if there are material modifications to data processing operations.
           </p>
         </section>
       </div>

@@ -146,7 +146,7 @@ export default function CoursesPage() {
                   <div className="p-5 flex flex-col flex-1 space-y-3">
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <RiUserLine className="shrink-0" />
-                      <span>{course.instructorName ?? "BuildCraft Team"}</span>
+                      <span>{course.instructorName ?? "Victory Design & Construction Team"}</span>
                     </div>
 
                     <h3 className="font-semibold text-base leading-snug group-hover:text-primary transition-colors line-clamp-2">

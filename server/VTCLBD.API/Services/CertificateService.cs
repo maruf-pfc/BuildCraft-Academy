@@ -25,25 +25,6 @@ namespace VTCLBD.API.Services
 
         private byte[] BuildPdf(CertificateRequestDto request)
         {
-            var doc = Document.Create(container =>
-            {
-                container.Page(page =>
-                {
-                    // Landscape A4
-                    page.Size(PageSizes.A4.Landscape());
-                    page.Margin(0);
-
-                    page.Content().Element(ComposeContent(request));
-                });
-            });
-
-            using var ms = new MemoryStream();
-            doc.GeneratePdf(ms);
-            return ms.ToArray();
-        }
-
-        private Action<IContainer> ComposeContent(CertificateRequestDto request)
-        {
             var recipientName = string.IsNullOrWhiteSpace(request.RecipientName)
                 ? "Recipient"
                 : request.RecipientName;
@@ -58,144 +39,169 @@ namespace VTCLBD.API.Services
 
             var issuedDate = request.IssuedAt.ToString("MMMM dd, yyyy");
 
-            return c => c
-                .Background("#FCFCF9") // Premium soft ivory background
-                .DefaultTextStyle(t => t.FontFamily("Helvetica"))
-                .Column(col =>
+            var doc = Document.Create(container =>
+            {
+                container.Page(page =>
                 {
-                    // ── Premium Double Border ─────────────────────────────────────────────
-                    col.Item().Padding(20).Border(3).BorderColor("#0d4f6b") // Navy outer border
-                       .Padding(6).Border(1.5f).BorderColor("#c9a84c") // Gold inner border
-                       .Column(inner =>
-                       {
-                           // ── Header Banner ────────────────────────────────────────────
-                           inner.Item()
-                               .Background("#0d4f6b")
-                               .Padding(18)
-                               .Column(header =>
-                               {
-                                   header.Item().AlignCenter()
-                                       .Text("VICTORY TECHNOLOGIES AND CONSTRUCTION LTD")
-                                       .FontSize(16)
-                                       .Bold()
-                                       .FontColor(Colors.White)
-                                       .LetterSpacing(0.04f);
+                    // Landscape A4
+                    page.Size(PageSizes.A4.Landscape());
+                    page.Margin(36);
+                    page.DefaultTextStyle(t => t.FontFamily("Helvetica"));
 
-                                   header.Item().AlignCenter().PaddingTop(2)
-                                       .Text("BuildCraft Academy | Professional Excellence Division")
-                                       .FontSize(8.5f)
-                                       .FontColor("#a8d8ea")
-                                       .LetterSpacing(0.06f);
-                               });
+                    page.Background()
+                        .Padding(20)
+                        .Border(3)
+                        .BorderColor("#0d4f6b") // Navy outer border
+                        .Padding(6)
+                        .Border(1.5f)
+                        .BorderColor("#c9a84c") // Gold inner border
+                        .Background("#FCFCF9"); // Premium soft ivory background color
 
-                           // ── Gold Divider ─────────────────────────────────────────────
-                           inner.Item().Height(3).Background("#c9a84c");
+                    // ── Header Banner ────────────────────────────────────────────
+                    page.Header()
+                        .Background("#0d4f6b")
+                        .Padding(18)
+                        .Column(header =>
+                        {
+                            header.Item().AlignCenter()
+                                .Text("VICTORY DESIGN & CONSTRUCTION LTD")
+                                .FontSize(16)
+                                .Bold()
+                                .FontColor(Colors.White)
+                                .LetterSpacing(0.04f);
 
-                           // ── Title ────────────────────────────────────────────────────
-                           inner.Item().PaddingTop(18).AlignCenter()
-                               .Text("CERTIFICATE OF COMPLETION")
-                               .FontSize(26)
-                               .Bold()
-                               .FontColor("#0d4f6b")
-                               .LetterSpacing(0.08f);
+                            header.Item().AlignCenter().PaddingTop(2)
+                                .Text("Professional Excellence & Training Division")
+                                .FontSize(8.5f)
+                                .FontColor("#a8d8ea")
+                                .LetterSpacing(0.06f);
+                        });
 
-                           inner.Item().AlignCenter().PaddingTop(3).PaddingBottom(5)
-                               .Text("This is to proudly certify that")
-                               .FontSize(11)
-                               .Italic()
-                               .FontColor("#555555");
+                    // ── Main Content Area ─────────────────────────────────────────
+                    page.Content()
+                        .Column(col =>
+                        {
+                            // ── Gold Divider ─────────────────────────────────────────────
+                            col.Item().Height(3).Background("#c9a84c");
 
-                           // ── Recipient Name ───────────────────────────────────────────
-                           inner.Item().AlignCenter().PaddingVertical(5)
-                               .Text(recipientName)
-                               .FontSize(32)
-                               .Bold()
-                               .FontColor("#c9a84c");
+                            // ── Main Body (fills the remaining space between header and footer)
+                            col.Item().ExtendVertical().AlignMiddle().Column(midCol =>
+                            {
+                                midCol.Item().AlignCenter()
+                                    .Text("CERTIFICATE OF COMPLETION")
+                                    .FontSize(24)
+                                    .Bold()
+                                    .FontColor("#0d4f6b")
+                                    .LetterSpacing(0.08f);
 
-                           // ── Decorative Line ──────────────────────────────────────────
-                           inner.Item().AlignCenter().Width(280).Height(1.5f).Background("#c9a84c");
+                                midCol.Item().AlignCenter().PaddingTop(4).PaddingBottom(6)
+                                    .Text("This is to proudly certify that")
+                                    .FontSize(11)
+                                    .Italic()
+                                    .FontColor("#555555");
 
-                           inner.Item().AlignCenter().PaddingTop(8).PaddingBottom(3)
-                               .Text("has successfully completed all requirements of the professional training course")
-                               .FontSize(11)
-                               .Italic()
-                               .FontColor("#555555");
+                                // ── Recipient Name ───────────────────────────────────────────
+                                midCol.Item().AlignCenter().PaddingVertical(4)
+                                    .Text(recipientName)
+                                    .FontSize(30)
+                                    .Bold()
+                                    .FontColor("#c9a84c");
 
-                           // ── Course Title ─────────────────────────────────────────────
-                           inner.Item().AlignCenter().PaddingVertical(3)
-                               .Text(courseTitle)
-                               .FontSize(20)
-                               .Bold()
-                               .FontColor("#0d4f6b");
+                                // ── Decorative Line ──────────────────────────────────────────
+                                midCol.Item().AlignCenter().Width(240).Height(1.5f).Background("#c9a84c");
 
-                           // ── Footer row with dates, stamp and signature ────────────────
-                           inner.Item().PaddingTop(20).PaddingHorizontal(30).Row(row =>
-                           {
-                               // Issue Date
-                               row.RelativeItem().Column(lc =>
-                               {
-                                   lc.Item()
-                                       .Text("Date of Issue")
-                                       .FontSize(8)
-                                       .Bold()
-                                       .FontColor("#888888")
-                                       .LetterSpacing(0.05f);
-                                   lc.Item().Height(1).Background("#c9a84c");
-                                   lc.Item().PaddingTop(3)
-                                       .Text(issuedDate)
-                                       .FontSize(10)
-                                       .Bold()
-                                       .FontColor("#222222");
-                               });
+                                midCol.Item().AlignCenter().PaddingTop(8).PaddingBottom(4)
+                                    .Text("has successfully completed all requirements of the professional training course")
+                                    .FontSize(11)
+                                    .Italic()
+                                    .FontColor("#555555");
 
-                               // Verified Stamp in the center
-                               row.RelativeItem().AlignCenter().Column(cc =>
-                               {
-                                   cc.Item().AlignCenter()
-                                       .Text("★   VTCLBD   ★")
-                                       .FontSize(11)
-                                       .Bold()
-                                       .FontColor("#c9a84c");
+                                // ── Course Title ─────────────────────────────────────────────
+                                midCol.Item().AlignCenter().PaddingVertical(2)
+                                    .Text(courseTitle)
+                                    .FontSize(18)
+                                    .Bold()
+                                    .FontColor("#0d4f6b");
+                            });
+                        });
 
-                                   if (!string.IsNullOrEmpty(certNumber))
-                                   {
-                                       cc.Item().AlignCenter().PaddingTop(2)
-                                           .Text($"Cert No: {certNumber}")
-                                           .FontSize(7.5f)
-                                           .FontColor("#777777")
-                                           .LetterSpacing(0.03f);
-                                   }
-                               });
+                    // ── Footer ────────────────────────────────────────────────────
+                    page.Footer()
+                        .Column(footer =>
+                        {
+                            // ── Footer row with dates, stamp and signature ────────────────
+                            footer.Item().PaddingBottom(12).PaddingHorizontal(30).Row(row =>
+                            {
+                                // Issue Date
+                                row.RelativeItem().Column(lc =>
+                                {
+                                    lc.Item()
+                                        .Text("Date of Issue")
+                                        .FontSize(8)
+                                        .Bold()
+                                        .FontColor("#888888")
+                                        .LetterSpacing(0.05f);
+                                    lc.Item().Height(1).Background("#c9a84c");
+                                    lc.Item().PaddingTop(3)
+                                        .Text(issuedDate)
+                                        .FontSize(10)
+                                        .Bold()
+                                        .FontColor("#222222");
+                                });
 
-                               // Signature
-                               row.RelativeItem().AlignRight().Column(rc =>
-                               {
-                                   rc.Item().AlignRight()
-                                       .Text("Authorised By")
-                                       .FontSize(8)
-                                       .Bold()
-                                       .FontColor("#888888")
-                                       .LetterSpacing(0.05f);
-                                   rc.Item().AlignRight().Height(1).Background("#c9a84c");
-                                   rc.Item().AlignRight().PaddingTop(3)
-                                       .Text("Director, BuildCraft Academy")
-                                       .FontSize(10)
-                                       .Bold()
-                                       .FontColor("#222222");
-                               });
-                           });
+                                // Verified Stamp in the center
+                                row.RelativeItem().AlignCenter().Column(cc =>
+                                {
+                                    cc.Item().AlignCenter()
+                                        .Text("★   VTCLBD   ★")
+                                        .FontSize(11)
+                                        .Bold()
+                                        .FontColor("#c9a84c");
 
-                           // ── Footer Metadata ──────────────────────────────────────────
-                           inner.Item().PaddingTop(16)
-                               .Background("#f0f8fc")
-                               .Padding(6)
-                               .AlignCenter()
-                               .Text("Eastern Kamalapur Complex, 2nd Floor, Kamalapur, Dhaka 1000  |  +88 01779481486  |  support@vtclbd.com")
-                               .FontSize(7.5f)
-                               .FontColor("#4a7a8a")
-                               .LetterSpacing(0.02f);
-                       });
+                                    if (!string.IsNullOrEmpty(certNumber))
+                                    {
+                                        cc.Item().AlignCenter().PaddingTop(2)
+                                            .Text($"Cert No: {certNumber}")
+                                            .FontSize(7.5f)
+                                            .FontColor("#777777")
+                                            .LetterSpacing(0.03f);
+                                    }
+                                });
+
+                                // Signature
+                                row.RelativeItem().AlignRight().Column(rc =>
+                                {
+                                    rc.Item().AlignRight()
+                                        .Text("Authorised By")
+                                        .FontSize(8)
+                                        .Bold()
+                                        .FontColor("#888888")
+                                        .LetterSpacing(0.05f);
+                                    rc.Item().AlignRight().Height(1).Background("#c9a84c");
+                                    rc.Item().AlignRight().PaddingTop(3)
+                                        .Text("Director, Victory Design & Construction Ltd")
+                                        .FontSize(10)
+                                        .Bold()
+                                        .FontColor("#222222");
+                                });
+                            });
+
+                            // ── Footer Metadata ──────────────────────────────────────────
+                            footer.Item()
+                                .Background("#f0f8fc")
+                                .Padding(5)
+                                .AlignCenter()
+                                .Text("Eastern Kamalapur Complex, 2nd Floor, Kamalapur, Dhaka 1000  |  +88 01779481486  |  support@vtclbd.com")
+                                .FontSize(7.5f)
+                                .FontColor("#4a7a8a")
+                                .LetterSpacing(0.02f);
+                        });
                 });
+            });
+
+            using var ms = new MemoryStream();
+            doc.GeneratePdf(ms);
+            return ms.ToArray();
         }
     }
 }

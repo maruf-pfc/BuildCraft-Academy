@@ -4,6 +4,10 @@ This file tracks the completed, ongoing, and pending features of the Victory Tec
 
 ## 🟩 COMPLETED FEATURES
 
+*   **💳 SSLCommerz Sandbox API Integration**:
+    *   Initiation service generating secure gateway session pages redirecting user.
+    *   Form-urlencoded callback handling for success/fail/cancel redirect workflows.
+    *    validator/api validationserverAPI transaction verification securing enrollment activation and automated student role upgrades.
 *   **🔒 Auth System & Session Management**:
     *   JWT-based registration, login, and profile fetching.
     *   Persistent Zustand store (`auth.store.ts`) for auth tokens.
@@ -52,8 +56,8 @@ This file tracks the completed, ongoing, and pending features of the Victory Tec
 
 ## 🟥 INCOMPLETE / PLANNED FEATURES
 
-*   **💳 Live BKash & SSLCommerz Sandbox API Integration**:
-    *   Transitioning from manual payment code verification to real-time redirect gateways.
+*   **💳 Live BKash Integration**:
+    *   Transitioning bKash manual payment code verification to real-time checkout API.
 *   **🔔 Real-time Notification System**:
     *   SignalR backend connection triggering instant browser popups for certificate issuances and course enrollments.
 *   **📈 Course Video Completion Telemetry**:

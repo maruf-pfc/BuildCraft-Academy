@@ -90,7 +90,7 @@ export default function CertificatesPage() {
       <div>
         <h1 className="text-2xl font-bold">My Certificates</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          View and download your official BuildCraft Academy credentials.
+          View and download your official Victory Design & Construction Ltd credentials.
         </p>
       </div>
 

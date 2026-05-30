@@ -21,6 +21,9 @@ export const paymentService = {
     amount: number;
   }) => api.post<ApiResponse<any>>("/payment/enroll-request", data).then((r) => r.data),
 
+  initiateSSLCommerz: (courseId: string) =>
+    api.post<ApiResponse<{ gatewayPageURL: string; transactionId: string }>>("/payment/sslcommerz/initiate", { courseId }).then((r) => r.data),
+
   getAllPayments: () =>
     api.get<ApiResponse<any[]>>("/payment").then((r) => r.data),
 
