@@ -23,6 +23,15 @@ function formatPrice(price: number) {
   }).format(price);
 }
 
+function getCourseImage(title: string): string {
+  const t = title.toLowerCase();
+  if (t.includes("autocad")) return "/course_autocad.png";
+  if (t.includes("revit")) return "/course_revit.png";
+  if (t.includes("interior")) return "/course_interior.png";
+  if (t.includes("structural") || t.includes("etabs")) return "/hero_structural.png";
+  return "/hero_construction.png";
+}
+
 export default function CoursesPage() {
   const [search, setSearch] = useState("");
 
@@ -119,10 +128,15 @@ export default function CoursesPage() {
                   className="course-card group rounded-2xl border border-border bg-background overflow-hidden hover:border-primary/40 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
                 >
                   {/* Thumbnail */}
-                  <div className="h-44 bg-gradient-to-br from-primary/20 via-primary/5 to-cyan-500/10 flex items-center justify-center relative overflow-hidden">
-                    <RiGraduationCapLine className="text-6xl text-primary/30 group-hover:text-primary/50 group-hover:scale-110 transition-all duration-500" />
+                  <div className="h-44 relative overflow-hidden bg-muted">
+                    <img
+                      src={getCourseImage(course.title)}
+                      alt={course.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors duration-300" />
                     <div className="absolute top-3 right-3">
-                      <span className="px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
+                      <span className="px-2.5 py-1 rounded-full bg-primary/95 text-primary-foreground text-xs font-bold shadow-md">
                         {formatPrice(course.price)}
                       </span>
                     </div>

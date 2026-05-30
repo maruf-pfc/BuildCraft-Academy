@@ -44,6 +44,15 @@ function formatPrice(price: number) {
   return new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", maximumFractionDigits: 0 }).format(price);
 }
 
+function getCourseImage(title: string): string {
+  const t = title.toLowerCase();
+  if (t.includes("autocad")) return "/course_autocad.png";
+  if (t.includes("revit")) return "/course_revit.png";
+  if (t.includes("interior")) return "/course_interior.png";
+  if (t.includes("structural") || t.includes("etabs")) return "/hero_structural.png";
+  return "/hero_construction.png";
+}
+
 export default function CourseDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -186,7 +195,15 @@ export default function CourseDetailPage() {
               </div>
             </div>
             <div>
-              <div className="rounded-2xl border border-border bg-background shadow-xl p-6 space-y-4 sticky top-24">
+              <div className="rounded-2xl border border-border bg-background shadow-xl p-6 space-y-4 sticky top-24 overflow-hidden">
+                <div className="h-40 -mx-6 -mt-6 relative overflow-hidden bg-muted">
+                  <img
+                    src={getCourseImage(course.title)}
+                    alt={course.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-black/10" />
+                </div>
                 <div className="text-xs uppercase font-extrabold tracking-widest text-muted-foreground">
                   Enrollment Fee
                 </div>

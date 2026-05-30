@@ -6,6 +6,7 @@ namespace VTCLBD.API.Interfaces
     {
         Task<AuthResponseDto> RegisterAsync(RegisterRequestDto request);
         Task<AuthResponseDto> LoginAsync(LoginRequestDto request);
+        Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginRequestDto request);
         Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto request);
         Task<string> ResetPasswordAsync(ResetPasswordRequestDto request);
     }

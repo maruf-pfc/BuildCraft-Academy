@@ -30,6 +30,13 @@ namespace VTCLBD.API.Controllers
             return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "Login successful."));
         }
 
+        [HttpPost("google-login")]
+        public async Task<ActionResult<ApiResponse<AuthResponseDto>>> GoogleLogin([FromBody] GoogleLoginRequestDto request)
+        {
+            var result = await _authService.GoogleLoginAsync(request);
+            return Ok(ApiResponse<AuthResponseDto>.SuccessResponse(result, "Google Sign-In successful."));
+        }
+
         [HttpPost("forgot-password")]
         public async Task<ActionResult<ApiResponse<string>>> ForgotPassword([FromBody] ForgotPasswordRequestDto request)
         {

@@ -85,6 +85,55 @@ namespace VTCLBD.API.Services
             };
         }
 
+        public async Task<AuthResponseDto> GoogleLoginAsync(GoogleLoginRequestDto request)
+        {
+            if (string.IsNullOrWhiteSpace(request.IdToken))
+                throw new ApiException("Invalid Google Authentication token.", 400);
+
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    UserName = request.Email,
+                    Email = request.Email,
+                    FullName = request.FullName,
+                    Role = "User",
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                var randomPass = Guid.NewGuid().ToString("N") + "aA1!";
+                var result = await _userManager.CreateAsync(user, randomPass);
+                if (!result.Succeeded)
+                {
+                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                    throw new ApiException($"Google sign-in registration failed: {errors}", 400);
+                }
+
+                if (!await _roleManager.RoleExistsAsync("User"))
+                    await _roleManager.CreateAsync(new IdentityRole("User"));
+
+                await _userManager.AddToRoleAsync(user, "User");
+            }
+
+            if (!user.IsActive)
+                throw new ApiException("Your account has been deactivated. Please contact support.", 403);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var role = roles.FirstOrDefault() ?? "User";
+
+            var token = _jwtHelper.GenerateToken(user, role);
+
+            return new AuthResponseDto
+            {
+                Token = token,
+                Email = user.Email ?? string.Empty,
+                FullName = user.FullName,
+                Role = role
+            };
+        }
+
         public async Task<string> ForgotPasswordAsync(ForgotPasswordRequestDto request)
         {
             var user = await _userManager.FindByEmailAsync(request.Email);

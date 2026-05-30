@@ -29,6 +29,12 @@ export interface LoginRequestDto {
   password: string;
 }
 
+export interface GoogleLoginRequestDto {
+  email: string;
+  fullName: string;
+  idToken: string;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Courses
 // ─────────────────────────────────────────────────────────────────────────────
