@@ -165,22 +165,19 @@ export default function HomePage() {
 
   const banners = [
   {
-    image:
-      "https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1920&auto=format&fit=crop",
+    image: "/hero_construction.png",
     title: "Master The Art of Building & Engineering",
     subtitle:
       "Expert-led courses in AutoCAD, Revit, ETABS, and Site Engineering.",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1484154218962-a197022b5858?q=80&w=1920&auto=format&fit=crop",
+    image: "/hero_architecture.png",
     title: "Delivering Architectural Excellence",
     subtitle:
       "Professional structural, architectural, and interior solutions.",
   },
   {
-    image:
-      "https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=1920&auto=format&fit=crop",
+    image: "/hero_structural.png",
     title: "Sustainable Structural Engineering",
     subtitle:
       "From concepts to completion with precision and transparency.",

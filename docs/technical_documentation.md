@@ -13,7 +13,7 @@ The backend is structured according to **Clean Architecture** patterns, separati
 
 ```
 server/
-├── Dockerfile                   # Multi-stage production build script (.NET 8 SDK & Runtime)
+├── Dockerfile                   # Multi-stage production build script (.NET 10.0 SDK & Runtime)
 ├── VTCLBD.slnx                  # Solution configuration reference
 └── VTCLBD.API/                  # Core Web API Application Project
     ├── Program.cs               # Application entry point, DI containers, and middlewares config
@@ -382,8 +382,8 @@ NEXT_PUBLIC_API_URL=http://localhost:5237/api
 
 #### Backend: `server/Dockerfile`
 ```dockerfile
-# Stage 1: NuGet Restore & Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Stage 1: Build & Restore
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 COPY ["VTCLBD.API/VTCLBD.API.csproj", "VTCLBD.API/"]
@@ -398,7 +398,7 @@ FROM build AS publish
 RUN dotnet publish "VTCLBD.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 # Stage 3: Lightweight ASP.NET Core Runtime 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
@@ -412,11 +412,11 @@ ENTRYPOINT ["dotnet", "VTCLBD.API.dll"]
 #### Frontend Next.js: `client/Dockerfile`
 ```dockerfile
 # Stage 1: Build static Next.js assets
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
@@ -427,7 +427,7 @@ ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 RUN npm run build
 
 # Stage 2: Runtime Runner
-FROM node:20-alpine AS runner
+FROM node:22-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
@@ -520,8 +520,8 @@ volumes:
 The GitHub Actions workflow (.github/workflows/ci-cd.yml) runs on every push or pull request to the `main`, `master`, or `final-branch` branches.
 
 It executes the following tasks to ensure application stability:
-1.  **Backend Verification**: Sets up .NET Core 8.0 SDK, restores solution dependencies (`VTCLBD.slnx`), builds binary configurations, and executes backend unit tests.
-2.  **Frontend Compilation Validation**: Sets up Node.js 20 environment, installs project dependencies from package-lock cache, runs syntax linter, and triggers Next.js production builds.
+1.  **Backend Verification**: Sets up .NET Core 10.0 SDK, restores solution dependencies (`VTCLBD.slnx`), builds binary configurations, and executes backend unit tests.
+2.  **Frontend Compilation Validation**: Sets up Node.js 22 environment, installs project dependencies from package-lock cache, runs syntax linter, and triggers Next.js production builds.
 3.  **Docker Dry Run builds**: Triggers builds of both backend and frontend Dockerfiles in test-mode to guarantee zero runtime image mismatches before deployments.
 
 ---

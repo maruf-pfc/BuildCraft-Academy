@@ -82,6 +82,7 @@ graph TD
 
 ### 📋 CI Workflow Files
 
-1.  **Backend CI** (`.github/workflows/backend-ci.yml`): Installs dependencies and verifies compilation of the .NET Web API project.
-2.  **Frontend CI** (`.github/workflows/frontend-ci.yml`): Runs code style checks, TypeScript compiler validation, and the Next.js builder checks.
-3.  **Docker Build Validation** (`.github/workflows/docker-ci.yml`): Validates container image compilation without deploying the resulting artifacts.
+1.  **Unified CI/CD Pipeline** (`.github/workflows/ci-cd.yml`):
+    *   **Backend CI Job**: Restores dependencies, compiles the .NET Web API project in Release mode, and runs test suites.
+    *   **Frontend CI Job**: Performs package installation, checks code style/linters, and tests the Next.js production build.
+    *   **Docker Build Validation Job**: Validates the multi-stage docker container image build process for both the Next.js client and the .NET server.
