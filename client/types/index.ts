@@ -148,3 +148,20 @@ export interface PaymentResponseDto {
   message: string;
   isEnrolled: boolean;
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Jobs / Careers
+// ─────────────────────────────────────────────────────────────────────────────
+export interface JobResponseDto {
+  id: string;
+  title: string;
+  department: string;
+  location: string;
+  jobType: string;
+  description: string;
+  requirements: string;
+  salaryRange: string;
+  googleFormUrl: string;
+  isPublished: boolean;
+  createdAt: string;
+}
