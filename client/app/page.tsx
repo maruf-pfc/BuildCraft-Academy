@@ -20,6 +20,7 @@ import { projectService } from "@/services/project.service";
 import type { CourseResponseDto, ProjectResponseDto } from "@/types";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { CmsContent } from "@/components/cms-content";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("en-BD", {
@@ -244,9 +245,17 @@ export default function HomePage() {
                         {banner.title}
                       </h1>
 
-                      <p className="text-sm sm:text-base text-white/80 leading-relaxed max-w-xl">
-                        {banner.subtitle}
-                      </p>
+                      <div className="text-sm sm:text-base text-white/80 leading-relaxed max-w-xl">
+                        {index === 1 ? (
+                          <CmsContent
+                            identifier="home-hero-subtitle"
+                            fallback={banner.subtitle}
+                            as="span"
+                          />
+                        ) : (
+                          banner.subtitle
+                        )}
+                      </div>
 
                       <div className="flex gap-3 pt-2 perspective-container">
                         <Link

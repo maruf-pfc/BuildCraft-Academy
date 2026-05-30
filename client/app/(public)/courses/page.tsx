@@ -13,6 +13,7 @@ import {
 } from "react-icons/ri";
 import { courseService } from "@/services/course.service";
 import type { CourseResponseDto } from "@/types";
+import { CmsContent } from "@/components/cms-content";
 
 function formatPrice(price: number) {
   return new Intl.NumberFormat("en-BD", {
@@ -53,11 +54,12 @@ export default function CoursesPage() {
           <h1 className="text-4xl sm:text-5xl font-bold mb-4">
             Build Skills That Matter
           </h1>
-          <p className="text-muted-foreground text-lg leading-relaxed">
-            Expert-crafted courses in construction, interior design, and
-            structural engineering — learn at your own pace with certificate
-            on completion.
-          </p>
+          <CmsContent
+            identifier="academy-training-tagline"
+            fallback="Expert-crafted courses in construction, interior design, and structural engineering — learn at your own pace with certificate on completion."
+            className="text-muted-foreground text-lg leading-relaxed"
+            as="p"
+          />
         </div>
 
         {/* Search */}

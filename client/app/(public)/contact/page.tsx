@@ -14,6 +14,8 @@ import {
   RiBuildingLine,
 } from "react-icons/ri";
 
+import { CmsContent } from "@/components/cms-content";
+
 const schema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
@@ -78,31 +80,19 @@ export default function ContactPage() {
             </div>
 
             <div className="space-y-6">
-              {/* Head Office */}
+              {/* Office Locations */}
               <div className="flex gap-4 items-start rounded-2xl border border-border p-5 bg-card shadow-sm hover:border-primary/30 transition-all duration-300">
                 <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
                   <RiMapPinLine className="text-xl" />
                 </div>
-                <div>
-                  <h4 className="font-bold text-sm text-heading">Main Branch</h4>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 leading-relaxed">
-                    Eastern Kamalapur Complex<br />
-                    2nd Floor, Room No 206<br />
-                    Kamalapur, Dhaka 1000
-                  </p>
-                </div>
-              </div>
-
-              {/* Branch Office */}
-              <div className="flex gap-4 items-start rounded-2xl border border-border p-5 bg-card shadow-sm hover:border-secondary/30 transition-all duration-300">
-                <div className="w-10 h-10 rounded-xl bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
-                  <RiBuildingLine className="text-xl" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-sm text-heading">Branch Office</h4>
-                  <p className="text-xs sm:text-sm text-muted-foreground mt-1 leading-relaxed">
-                    Madhya Bazar, Chandina, Cumilla
-                  </p>
+                <div className="w-full">
+                  <h4 className="font-bold text-sm text-heading mb-1">Office Locations</h4>
+                  <CmsContent
+                    identifier="contact-office-address"
+                    fallback={`Main Branch: Eastern Kamalapur Complex, 2nd Floor, Room No 206, Kamalapur, Dhaka 1000.\nCumilla Branch: Madhya Bazar, Chandina, Cumilla.`}
+                    className="text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                    as="div"
+                  />
                 </div>
               </div>
 

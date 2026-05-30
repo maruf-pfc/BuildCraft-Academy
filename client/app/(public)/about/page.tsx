@@ -1,6 +1,8 @@
 "use client";
 
 
+import { CmsContent } from "@/components/cms-content";
+
 import {
   RiCompass3Line,
   RiBuilding4Line,
@@ -103,9 +105,12 @@ export default function AboutPage() {
               <h3 className="text-xl font-bold text-heading flex items-center gap-2">
                 Our Vision
               </h3>
-              <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                To become one of Bangladesh’s most trusted and innovative construction and consultancy companies by delivering modern engineering solutions that inspire confidence and long-term value.
-              </p>
+              <CmsContent
+                identifier="about-company-vision"
+                fallback="To become one of Bangladesh’s most trusted and innovative construction and consultancy companies by delivering modern engineering solutions that inspire confidence and long-term value."
+                className="text-xs sm:text-sm text-muted-foreground leading-relaxed"
+                as="p"
+              />
             </div>
 
             {/* Mission */}
